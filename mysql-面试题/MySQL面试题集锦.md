@@ -9,7 +9,7 @@
   * [4\. MySQL存储引擎有哪些？Memory引擎了解过没，什么情况下会用到？TempTable呢？](#4-mysql%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E6%9C%89%E5%93%AA%E4%BA%9Bmemory%E5%BC%95%E6%93%8E%E4%BA%86%E8%A7%A3%E8%BF%87%E6%B2%A1%E4%BB%80%E4%B9%88%E6%83%85%E5%86%B5%E4%B8%8B%E4%BC%9A%E7%94%A8%E5%88%B0temptable%E5%91%A2)
   * [5\.MySQL是一个单进程多线程架构，分别有哪些线程？作用是什么？](#5mysql%E6%98%AF%E4%B8%80%E4%B8%AA%E5%8D%95%E8%BF%9B%E7%A8%8B%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%9E%B6%E6%9E%84%E5%88%86%E5%88%AB%E6%9C%89%E5%93%AA%E4%BA%9B%E7%BA%BF%E7%A8%8B%E4%BD%9C%E7%94%A8%E6%98%AF%E4%BB%80%E4%B9%88)
   * [6\.MYSQL优化器是怎么运行的，为什么会做出错误决定，使用错误的索引？怎么解决？](#6mysql%E4%BC%98%E5%8C%96%E5%99%A8%E6%98%AF%E6%80%8E%E4%B9%88%E8%BF%90%E8%A1%8C%E7%9A%84%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%81%9A%E5%87%BA%E9%94%99%E8%AF%AF%E5%86%B3%E5%AE%9A%E4%BD%BF%E7%94%A8%E9%94%99%E8%AF%AF%E7%9A%84%E7%B4%A2%E5%BC%95%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3)
-  * [7\. 怎么理解MySQL对于SQL的执行是基于成本模型的？——未完](#7-%E6%80%8E%E4%B9%88%E7%90%86%E8%A7%A3mysql%E5%AF%B9%E4%BA%8Esql%E7%9A%84%E6%89%A7%E8%A1%8C%E6%98%AF%E5%9F%BA%E4%BA%8E%E6%88%90%E6%9C%AC%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%9C%AA%E5%AE%8C)
+  * [7\. 怎么理解MySQL对于SQL的执行是基于成本模型的？](#7-%E6%80%8E%E4%B9%88%E7%90%86%E8%A7%A3mysql%E5%AF%B9%E4%BA%8Esql%E7%9A%84%E6%89%A7%E8%A1%8C%E6%98%AF%E5%9F%BA%E4%BA%8E%E6%88%90%E6%9C%AC%E6%A8%A1%E5%9E%8B%E7%9A%84)
   * [8\. MySQL中有哪些文件？分别有什么用？——未完](#8-mysql%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%87%E4%BB%B6%E5%88%86%E5%88%AB%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%E6%9C%AA%E5%AE%8C)
   * [9\. 从性能和安全方面，MySQL是怎么做的？——未完](#9-%E4%BB%8E%E6%80%A7%E8%83%BD%E5%92%8C%E5%AE%89%E5%85%A8%E6%96%B9%E9%9D%A2mysql%E6%98%AF%E6%80%8E%E4%B9%88%E5%81%9A%E7%9A%84%E6%9C%AA%E5%AE%8C)
 * [（二）schema问题](#%E4%BA%8Cschema%E9%97%AE%E9%A2%98)
@@ -20,7 +20,8 @@
   * [5\.VARCHAR 和 CHAR有什么区别？除了空格的差异还有其他吗？](#5varchar-%E5%92%8C-char%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%E9%99%A4%E4%BA%86%E7%A9%BA%E6%A0%BC%E7%9A%84%E5%B7%AE%E5%BC%82%E8%BF%98%E6%9C%89%E5%85%B6%E4%BB%96%E5%90%97)
   * [6\.BLOB 和 TEXT 有什么不好的地方？该怎么解决？](#6blob-%E5%92%8C-text-%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%A5%BD%E7%9A%84%E5%9C%B0%E6%96%B9%E8%AF%A5%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3)
   * [7\. TIMESTAMP和DATETIME有什么区别？——未完](#7-timestamp%E5%92%8Cdatetime%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%E6%9C%AA%E5%AE%8C)
-  * [8\. MySQL中，一个数据页只有16K，当一个字段特别大，超过16K了，怎么存储？——未完](#8-mysql%E4%B8%AD%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%A1%B5%E5%8F%AA%E6%9C%8916k%E5%BD%93%E4%B8%80%E4%B8%AA%E5%AD%97%E6%AE%B5%E7%89%B9%E5%88%AB%E5%A4%A7%E8%B6%85%E8%BF%8716k%E4%BA%86%E6%80%8E%E4%B9%88%E5%AD%98%E5%82%A8%E6%9C%AA%E5%AE%8C)
+  * [8\. MySQL中，一个数据页只有16K，当一个字段特别大，超过16K了，怎么存储？](#8-mysql%E4%B8%AD%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E9%A1%B5%E5%8F%AA%E6%9C%8916k%E5%BD%93%E4%B8%80%E4%B8%AA%E5%AD%97%E6%AE%B5%E7%89%B9%E5%88%AB%E5%A4%A7%E8%B6%85%E8%BF%8716k%E4%BA%86%E6%80%8E%E4%B9%88%E5%AD%98%E5%82%A8)
+        * [记录中的数据太多产生的溢出](#%E8%AE%B0%E5%BD%95%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E5%A4%AA%E5%A4%9A%E4%BA%A7%E7%94%9F%E7%9A%84%E6%BA%A2%E5%87%BA)
   * [9\. 为什么要尽量设定一个主键?——未完](#9-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%B0%BD%E9%87%8F%E8%AE%BE%E5%AE%9A%E4%B8%80%E4%B8%AA%E4%B8%BB%E9%94%AE%E6%9C%AA%E5%AE%8C)
   * [10\. 主键选用什么类型？使用自增ID还是UUID?——未完](#10-%E4%B8%BB%E9%94%AE%E9%80%89%E7%94%A8%E4%BB%80%E4%B9%88%E7%B1%BB%E5%9E%8B%E4%BD%BF%E7%94%A8%E8%87%AA%E5%A2%9Eid%E8%BF%98%E6%98%AFuuid%E6%9C%AA%E5%AE%8C)
   * [11\. 字段为什么要求定义为not null?——未完](#11-%E5%AD%97%E6%AE%B5%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%B1%82%E5%AE%9A%E4%B9%89%E4%B8%BAnot-null%E6%9C%AA%E5%AE%8C)
@@ -28,22 +29,24 @@
 * [（三）SQL语句方面的问题](#%E4%B8%89sql%E8%AF%AD%E5%8F%A5%E6%96%B9%E9%9D%A2%E7%9A%84%E9%97%AE%E9%A2%98)
   * [1\. ALTER TABLE 会有什么影响？有没有解决办法？——未完](#1-alter-table-%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E5%BD%B1%E5%93%8D%E6%9C%89%E6%B2%A1%E6%9C%89%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95%E6%9C%AA%E5%AE%8C)
   * [2\. 怎么优化 order by 、group by？——未完](#2-%E6%80%8E%E4%B9%88%E4%BC%98%E5%8C%96-order-by-group-by%E6%9C%AA%E5%AE%8C)
-  * [3\.  select \* from A group by a desc; 这么写对吗？为什么？——未完](#3--select--from-a-group-by-a-desc-%E8%BF%99%E4%B9%88%E5%86%99%E5%AF%B9%E5%90%97%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%AA%E5%AE%8C)
-  * [4\. 怎么理解“延迟关联”？（怎么优化limit？）——未完](#4-%E6%80%8E%E4%B9%88%E7%90%86%E8%A7%A3%E5%BB%B6%E8%BF%9F%E5%85%B3%E8%81%94%E6%80%8E%E4%B9%88%E4%BC%98%E5%8C%96limit%E6%9C%AA%E5%AE%8C)
+  * [3\.  select \* from A group by a desc; 这么写对吗？为什么？](#3--select--from-a-group-by-a-desc-%E8%BF%99%E4%B9%88%E5%86%99%E5%AF%B9%E5%90%97%E4%B8%BA%E4%BB%80%E4%B9%88)
+  * [4\. 怎么理解“延迟关联”？（怎么优化limit？）](#4-%E6%80%8E%E4%B9%88%E7%90%86%E8%A7%A3%E5%BB%B6%E8%BF%9F%E5%85%B3%E8%81%94%E6%80%8E%E4%B9%88%E4%BC%98%E5%8C%96limit)
   * [5\. 超大分页怎么处理?——未完](#5-%E8%B6%85%E5%A4%A7%E5%88%86%E9%A1%B5%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%E6%9C%AA%E5%AE%8C)
   * [6\.如何优化子查询？——未完](#6%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%E5%AD%90%E6%9F%A5%E8%AF%A2%E6%9C%AA%E5%AE%8C)
   * [7\. MySQL是如何如何优化连表查询？——未完](#7-mysql%E6%98%AF%E5%A6%82%E4%BD%95%E5%A6%82%E4%BD%95%E4%BC%98%E5%8C%96%E8%BF%9E%E8%A1%A8%E6%9F%A5%E8%AF%A2%E6%9C%AA%E5%AE%8C)
-  * [8\. union 和 union all的区别？——未完](#8-union-%E5%92%8C-union-all%E7%9A%84%E5%8C%BA%E5%88%AB%E6%9C%AA%E5%AE%8C)
+  * [8\. union 和 union all的区别？](#8-union-%E5%92%8C-union-all%E7%9A%84%E5%8C%BA%E5%88%AB)
+  * [9\.一些有趣的问题](#9%E4%B8%80%E4%BA%9B%E6%9C%89%E8%B6%A3%E7%9A%84%E9%97%AE%E9%A2%98)
+    * [(1) select sid from sc where score &lt; 60 group by sid;  与 select distinct sid from sc where score &lt; 60; 相比性能如何？](#1-select-sid-from-sc-where-score--60-group-by-sid--%E4%B8%8E-select-distinct-sid-from-sc-where-score--60-%E7%9B%B8%E6%AF%94%E6%80%A7%E8%83%BD%E5%A6%82%E4%BD%95)
 * [（四）索引方面的问题](#%E5%9B%9B%E7%B4%A2%E5%BC%95%E6%96%B9%E9%9D%A2%E7%9A%84%E9%97%AE%E9%A2%98)
-  * [1\. 索引有哪些类型？怎么分类呢？——未完](#1-%E7%B4%A2%E5%BC%95%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%E6%80%8E%E4%B9%88%E5%88%86%E7%B1%BB%E5%91%A2%E6%9C%AA%E5%AE%8C)
+  * [1\. 索引有哪些类型？怎么分类呢？](#1-%E7%B4%A2%E5%BC%95%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B1%BB%E5%9E%8B%E6%80%8E%E4%B9%88%E5%88%86%E7%B1%BB%E5%91%A2)
   * [2\. 覆盖索引了解过没，有什么优势，怎么使用？考虑以下几个问题，会不会用到索引？——未完](#2-%E8%A6%86%E7%9B%96%E7%B4%A2%E5%BC%95%E4%BA%86%E8%A7%A3%E8%BF%87%E6%B2%A1%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E5%8A%BF%E6%80%8E%E4%B9%88%E4%BD%BF%E7%94%A8%E8%80%83%E8%99%91%E4%BB%A5%E4%B8%8B%E5%87%A0%E4%B8%AA%E9%97%AE%E9%A2%98%E4%BC%9A%E4%B8%8D%E4%BC%9A%E7%94%A8%E5%88%B0%E7%B4%A2%E5%BC%95%E6%9C%AA%E5%AE%8C)
   * [3\. 了解过前缀索引/压缩索引没？工作原理是啥？正序查询和倒叙查询会有什么不同？——未完](#3-%E4%BA%86%E8%A7%A3%E8%BF%87%E5%89%8D%E7%BC%80%E7%B4%A2%E5%BC%95%E5%8E%8B%E7%BC%A9%E7%B4%A2%E5%BC%95%E6%B2%A1%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E6%98%AF%E5%95%A5%E6%AD%A3%E5%BA%8F%E6%9F%A5%E8%AF%A2%E5%92%8C%E5%80%92%E5%8F%99%E6%9F%A5%E8%AF%A2%E4%BC%9A%E6%9C%89%E4%BB%80%E4%B9%88%E4%B8%8D%E5%90%8C%E6%9C%AA%E5%AE%8C)
-  * [4\. 聚簇索引和非聚簇索引有什么区别?——未完](#4-%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E5%92%8C%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%E6%9C%AA%E5%AE%8C)
+  * [4\. 聚簇索引和非聚簇索引有什么区别?](#4-%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E5%92%8C%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB)
   * [5\. 为什么使用索引？不使用索引会怎样？——未完](#5-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95%E4%B8%8D%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95%E4%BC%9A%E6%80%8E%E6%A0%B7%E6%9C%AA%E5%AE%8C)
   * [6\. 索引采用了哪些数据结构，分别有什么特征？——未完](#6-%E7%B4%A2%E5%BC%95%E9%87%87%E7%94%A8%E4%BA%86%E5%93%AA%E4%BA%9B%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E5%88%AB%E6%9C%89%E4%BB%80%E4%B9%88%E7%89%B9%E5%BE%81%E6%9C%AA%E5%AE%8C)
   * [7\.哈希索引了解过没，用在那里，解决了什么问题，有什么优势？有什么弊端？——未完](#7%E5%93%88%E5%B8%8C%E7%B4%A2%E5%BC%95%E4%BA%86%E8%A7%A3%E8%BF%87%E6%B2%A1%E7%94%A8%E5%9C%A8%E9%82%A3%E9%87%8C%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E5%8A%BF%E6%9C%89%E4%BB%80%E4%B9%88%E5%BC%8A%E7%AB%AF%E6%9C%AA%E5%AE%8C)
   * [8\. InnoDB自适应哈希索引是什么，怎么工作的，有什么优势？——未完](#8-innodb%E8%87%AA%E9%80%82%E5%BA%94%E5%93%88%E5%B8%8C%E7%B4%A2%E5%BC%95%E6%98%AF%E4%BB%80%E4%B9%88%E6%80%8E%E4%B9%88%E5%B7%A5%E4%BD%9C%E7%9A%84%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E5%8A%BF%E6%9C%AA%E5%AE%8C)
-  * [9\. 为什么使用B\+树，不用二叉树，平衡二叉树，B树？——未完](#9-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8b%E6%A0%91%E4%B8%8D%E7%94%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91b%E6%A0%91%E6%9C%AA%E5%AE%8C)
+  * [9\. 为什么使用B\+树作为索引的数据结构，不用二叉树，平衡二叉树，B树？](#9-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8b%E6%A0%91%E4%BD%9C%E4%B8%BA%E7%B4%A2%E5%BC%95%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8D%E7%94%A8%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91b%E6%A0%91)
   * [10\. B\+树的插入和删除是怎样进行的？——未完](#10-b%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5%E5%92%8C%E5%88%A0%E9%99%A4%E6%98%AF%E6%80%8E%E6%A0%B7%E8%BF%9B%E8%A1%8C%E7%9A%84%E6%9C%AA%E5%AE%8C)
   * [11\. 根据B\+树的插入规则来看，有点浪费空间，MySQL是怎么解决的？——未完](#11-%E6%A0%B9%E6%8D%AEb%E6%A0%91%E7%9A%84%E6%8F%92%E5%85%A5%E8%A7%84%E5%88%99%E6%9D%A5%E7%9C%8B%E6%9C%89%E7%82%B9%E6%B5%AA%E8%B4%B9%E7%A9%BA%E9%97%B4mysql%E6%98%AF%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%E7%9A%84%E6%9C%AA%E5%AE%8C)
   * [12\. 怎么查看sql是否走了索引？详细解释一下explain？——未完](#12-%E6%80%8E%E4%B9%88%E6%9F%A5%E7%9C%8Bsql%E6%98%AF%E5%90%A6%E8%B5%B0%E4%BA%86%E7%B4%A2%E5%BC%95%E8%AF%A6%E7%BB%86%E8%A7%A3%E9%87%8A%E4%B8%80%E4%B8%8Bexplain%E6%9C%AA%E5%AE%8C)
@@ -52,7 +55,7 @@
   * [15\.为什么不建议删除数据，而是添加删除标识？——未完](#15%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%BB%BA%E8%AE%AE%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E8%80%8C%E6%98%AF%E6%B7%BB%E5%8A%A0%E5%88%A0%E9%99%A4%E6%A0%87%E8%AF%86%E6%9C%AA%E5%AE%8C)
   * [16\. 数据存储碎片有哪些？——未完](#16-%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E7%A2%8E%E7%89%87%E6%9C%89%E5%93%AA%E4%BA%9B%E6%9C%AA%E5%AE%8C)
   * [17\. MySQL是如何构建索引的？——未完](#17-mysql%E6%98%AF%E5%A6%82%E4%BD%95%E6%9E%84%E5%BB%BA%E7%B4%A2%E5%BC%95%E7%9A%84%E6%9C%AA%E5%AE%8C)
-  * [18\. 聊一聊十大经典排序算法？为什么MySQL中 选择了归并排序？——未完](#18-%E8%81%8A%E4%B8%80%E8%81%8A%E5%8D%81%E5%A4%A7%E7%BB%8F%E5%85%B8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E4%B8%BA%E4%BB%80%E4%B9%88mysql%E4%B8%AD-%E9%80%89%E6%8B%A9%E4%BA%86%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F%E6%9C%AA%E5%AE%8C)
+  * [18\. 聊一聊十大经典排序算法？MySQL中使用了哪些排序算法？——未完](#18-%E8%81%8A%E4%B8%80%E8%81%8A%E5%8D%81%E5%A4%A7%E7%BB%8F%E5%85%B8%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95mysql%E4%B8%AD%E4%BD%BF%E7%94%A8%E4%BA%86%E5%93%AA%E4%BA%9B%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%9C%AA%E5%AE%8C)
   * [19\. 构建好索引后，往索引里插入数据是一条一条的插入吗？有什么解决方案？——未完](#19-%E6%9E%84%E5%BB%BA%E5%A5%BD%E7%B4%A2%E5%BC%95%E5%90%8E%E5%BE%80%E7%B4%A2%E5%BC%95%E9%87%8C%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE%E6%98%AF%E4%B8%80%E6%9D%A1%E4%B8%80%E6%9D%A1%E7%9A%84%E6%8F%92%E5%85%A5%E5%90%97%E6%9C%89%E4%BB%80%E4%B9%88%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E6%9C%AA%E5%AE%8C)
   * [20\.索引中，对 NULL 值是怎么统计的？分别有什么影响？——未完](#20%E7%B4%A2%E5%BC%95%E4%B8%AD%E5%AF%B9-null-%E5%80%BC%E6%98%AF%E6%80%8E%E4%B9%88%E7%BB%9F%E8%AE%A1%E7%9A%84%E5%88%86%E5%88%AB%E6%9C%89%E4%BB%80%E4%B9%88%E5%BD%B1%E5%93%8D%E6%9C%AA%E5%AE%8C)
   * [21\. 哪些场景会使索引失效？该如何避免索引失效？——未完](#21-%E5%93%AA%E4%BA%9B%E5%9C%BA%E6%99%AF%E4%BC%9A%E4%BD%BF%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E8%AF%A5%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E6%9C%AA%E5%AE%8C)
@@ -62,7 +65,7 @@
   * [25\. 为什么不建议对性别建立索引？那我非要对性别进行查询（例如：查北京东城的男生），有什么解决方案？](#25-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E5%BB%BA%E8%AE%AE%E5%AF%B9%E6%80%A7%E5%88%AB%E5%BB%BA%E7%AB%8B%E7%B4%A2%E5%BC%95%E9%82%A3%E6%88%91%E9%9D%9E%E8%A6%81%E5%AF%B9%E6%80%A7%E5%88%AB%E8%BF%9B%E8%A1%8C%E6%9F%A5%E8%AF%A2%E4%BE%8B%E5%A6%82%E6%9F%A5%E5%8C%97%E4%BA%AC%E4%B8%9C%E5%9F%8E%E7%9A%84%E7%94%B7%E7%94%9F%E6%9C%89%E4%BB%80%E4%B9%88%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
   * [26\.假设一个索引中，字段是varchar类型，输入值是int类型，会走索引吗？](#26%E5%81%87%E8%AE%BE%E4%B8%80%E4%B8%AA%E7%B4%A2%E5%BC%95%E4%B8%AD%E5%AD%97%E6%AE%B5%E6%98%AFvarchar%E7%B1%BB%E5%9E%8B%E8%BE%93%E5%85%A5%E5%80%BC%E6%98%AFint%E7%B1%BB%E5%9E%8B%E4%BC%9A%E8%B5%B0%E7%B4%A2%E5%BC%95%E5%90%97)
   * [27\. 假设一个索引中，字段是int类型，输入值是varchar类型，会走索引吗？](#27-%E5%81%87%E8%AE%BE%E4%B8%80%E4%B8%AA%E7%B4%A2%E5%BC%95%E4%B8%AD%E5%AD%97%E6%AE%B5%E6%98%AFint%E7%B1%BB%E5%9E%8B%E8%BE%93%E5%85%A5%E5%80%BC%E6%98%AFvarchar%E7%B1%BB%E5%9E%8B%E4%BC%9A%E8%B5%B0%E7%B4%A2%E5%BC%95%E5%90%97)
-  * [28\. 假设我没有索引，该怎么优化SQL？——未完](#28-%E5%81%87%E8%AE%BE%E6%88%91%E6%B2%A1%E6%9C%89%E7%B4%A2%E5%BC%95%E8%AF%A5%E6%80%8E%E4%B9%88%E4%BC%98%E5%8C%96sql%E6%9C%AA%E5%AE%8C)
+  * [28\. 假设我没有索引，该怎么优化SQL？](#28-%E5%81%87%E8%AE%BE%E6%88%91%E6%B2%A1%E6%9C%89%E7%B4%A2%E5%BC%95%E8%AF%A5%E6%80%8E%E4%B9%88%E4%BC%98%E5%8C%96sql)
 * [（五）算法类问题](#%E4%BA%94%E7%AE%97%E6%B3%95%E7%B1%BB%E9%97%AE%E9%A2%98)
   * [1\.InnoDB的缓冲池有缓存页，他是怎么淘汰缓存的？跟传统的LRU相比有何优势？](#1innodb%E7%9A%84%E7%BC%93%E5%86%B2%E6%B1%A0%E6%9C%89%E7%BC%93%E5%AD%98%E9%A1%B5%E4%BB%96%E6%98%AF%E6%80%8E%E4%B9%88%E6%B7%98%E6%B1%B0%E7%BC%93%E5%AD%98%E7%9A%84%E8%B7%9F%E4%BC%A0%E7%BB%9F%E7%9A%84lru%E7%9B%B8%E6%AF%94%E6%9C%89%E4%BD%95%E4%BC%98%E5%8A%BF)
   * [2\. order by排序有哪两种算法？——未完](#2-order-by%E6%8E%92%E5%BA%8F%E6%9C%89%E5%93%AA%E4%B8%A4%E7%A7%8D%E7%AE%97%E6%B3%95%E6%9C%AA%E5%AE%8C)
@@ -75,12 +78,14 @@
   * [5\. 谈一谈InnoDB的MVCC，他是怎么运行的，解决了什么问题？——未完](#5-%E8%B0%88%E4%B8%80%E8%B0%88innodb%E7%9A%84mvcc%E4%BB%96%E6%98%AF%E6%80%8E%E4%B9%88%E8%BF%90%E8%A1%8C%E7%9A%84%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%E6%9C%AA%E5%AE%8C)
   * [6\. 分布式事务解决方案？——未完](#6-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E6%9C%AA%E5%AE%8C)
 * [（七）日志类问题](#%E4%B8%83%E6%97%A5%E5%BF%97%E7%B1%BB%E9%97%AE%E9%A2%98)
-  * [1\. redo log 和 bin log有什么区别？——未完](#1-redo-log-%E5%92%8C-bin-log%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%E6%9C%AA%E5%AE%8C)
+  * [1\. redo log 和 bin log有什么区别？](#1-redo-log-%E5%92%8C-bin-log%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB)
   * [2\.事务提交时，redo log和binlog的写入顺序是怎样的——未完](#2%E4%BA%8B%E5%8A%A1%E6%8F%90%E4%BA%A4%E6%97%B6redo-log%E5%92%8Cbinlog%E7%9A%84%E5%86%99%E5%85%A5%E9%A1%BA%E5%BA%8F%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%E6%9C%AA%E5%AE%8C)
   * [3\.redo log什么时候释放？undo log什么时候释放？——未完](#3redo-log%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%87%8A%E6%94%BEundo-log%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%87%8A%E6%94%BE%E6%9C%AA%E5%AE%8C)
   * [4\.什么是write\-Ahead Log策略？——未完](#4%E4%BB%80%E4%B9%88%E6%98%AFwrite-ahead-log%E7%AD%96%E7%95%A5%E6%9C%AA%E5%AE%8C)
   * [5\.bin log记录日志有哪些方式？常用哪种？为什么？各有什么优劣势？——未完](#5bin-log%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%B9%E5%BC%8F%E5%B8%B8%E7%94%A8%E5%93%AA%E7%A7%8D%E4%B8%BA%E4%BB%80%E4%B9%88%E5%90%84%E6%9C%89%E4%BB%80%E4%B9%88%E4%BC%98%E5%8A%A3%E5%8A%BF%E6%9C%AA%E5%AE%8C)
   * [6\.关心过业务系统里面的sql耗时吗?统计过慢查询吗?对慢查询都怎么优化过?——未完](#6%E5%85%B3%E5%BF%83%E8%BF%87%E4%B8%9A%E5%8A%A1%E7%B3%BB%E7%BB%9F%E9%87%8C%E9%9D%A2%E7%9A%84sql%E8%80%97%E6%97%B6%E5%90%97%E7%BB%9F%E8%AE%A1%E8%BF%87%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%90%97%E5%AF%B9%E6%85%A2%E6%9F%A5%E8%AF%A2%E9%83%BD%E6%80%8E%E4%B9%88%E4%BC%98%E5%8C%96%E8%BF%87%E6%9C%AA%E5%AE%8C)
+  * [7\.总结一下 bin\-log 和 redo\-log 的刷脏参数？——未完](#7%E6%80%BB%E7%BB%93%E4%B8%80%E4%B8%8B-bin-log-%E5%92%8C-redo-log-%E7%9A%84%E5%88%B7%E8%84%8F%E5%8F%82%E6%95%B0)
+  * [8\.聊一下 WAL 策略？——未完](#8%E8%81%8A%E4%B8%80%E4%B8%8B-wal-%E7%AD%96%E7%95%A5)
 * [（八）锁问题](#%E5%85%AB%E9%94%81%E9%97%AE%E9%A2%98)
   * [1\. 数据库中有哪些锁，有什么作用，有什么弊端？——未完](#1-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E9%94%81%E6%9C%89%E4%BB%80%E4%B9%88%E4%BD%9C%E7%94%A8%E6%9C%89%E4%BB%80%E4%B9%88%E5%BC%8A%E7%AB%AF%E6%9C%AA%E5%AE%8C)
   * [2\.latch 和 lock 有什么区别——未完](#2latch-%E5%92%8C-lock-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%E6%9C%AA%E5%AE%8C)
@@ -93,14 +98,14 @@
   * [9\. InnoDB对于聚簇索引和非聚簇索引，采用了不同的锁机制，为什么？——未完](#9-innodb%E5%AF%B9%E4%BA%8E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E5%92%8C%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E9%87%87%E7%94%A8%E4%BA%86%E4%B8%8D%E5%90%8C%E7%9A%84%E9%94%81%E6%9C%BA%E5%88%B6%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%AA%E5%AE%8C)
   * [10\.什么是间隙锁，有什么好处和坏处？——未完](#10%E4%BB%80%E4%B9%88%E6%98%AF%E9%97%B4%E9%9A%99%E9%94%81%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84%E5%92%8C%E5%9D%8F%E5%A4%84%E6%9C%AA%E5%AE%8C)
 * [（九）InnoDB类问题](#%E4%B9%9Dinnodb%E7%B1%BB%E9%97%AE%E9%A2%98)
-  * [1\.什么是缓冲池？有什么用？——未完](#1%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%86%B2%E6%B1%A0%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%E6%9C%AA%E5%AE%8C)
-  * [2\.聊一聊LRU算法，InnoDB是怎么实现LRU的？——未完](#2%E8%81%8A%E4%B8%80%E8%81%8Alru%E7%AE%97%E6%B3%95innodb%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0lru%E7%9A%84%E6%9C%AA%E5%AE%8C)
-  * [3\.聊一聊InnoDB架构，各组成部分有什么用？——未完](#3%E8%81%8A%E4%B8%80%E8%81%8Ainnodb%E6%9E%B6%E6%9E%84%E5%90%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%E6%9C%AA%E5%AE%8C)
+  * [1\.什么是缓冲池？有什么用？](#1%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%86%B2%E6%B1%A0%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8)
+  * [2\.聊一聊LRU算法，InnoDB是怎么实现LRU的？](#2%E8%81%8A%E4%B8%80%E8%81%8Alru%E7%AE%97%E6%B3%95innodb%E6%98%AF%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0lru%E7%9A%84)
+  * [3\.聊一聊InnoDB架构，各组成部分有什么用？](#3%E8%81%8A%E4%B8%80%E8%81%8Ainnodb%E6%9E%B6%E6%9E%84%E5%90%84%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8)
   * [4\.脏页刷盘机制是什么？脏页刷盘过程中，服务器或MySQL宕机了怎么办？——未完](#4%E8%84%8F%E9%A1%B5%E5%88%B7%E7%9B%98%E6%9C%BA%E5%88%B6%E6%98%AF%E4%BB%80%E4%B9%88%E8%84%8F%E9%A1%B5%E5%88%B7%E7%9B%98%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%88%96mysql%E5%AE%95%E6%9C%BA%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%E6%9C%AA%E5%AE%8C)
-  * [5\.什么是页？怎么理解页？——未完](#5%E4%BB%80%E4%B9%88%E6%98%AF%E9%A1%B5%E6%80%8E%E4%B9%88%E7%90%86%E8%A7%A3%E9%A1%B5%E6%9C%AA%E5%AE%8C)
+  * [5\.什么是页？怎么理解页？](#5%E4%BB%80%E4%B9%88%E6%98%AF%E9%A1%B5%E6%80%8E%E4%B9%88%E7%90%86%E8%A7%A3%E9%A1%B5)
   * [6\.怎么查看 InnoDB 状态？能看到什么信息？——未完](#6%E6%80%8E%E4%B9%88%E6%9F%A5%E7%9C%8B-innodb-%E7%8A%B6%E6%80%81%E8%83%BD%E7%9C%8B%E5%88%B0%E4%BB%80%E4%B9%88%E4%BF%A1%E6%81%AF%E6%9C%AA%E5%AE%8C)
   * [7\.聊一下伙伴内存分配系统——未完](#7%E8%81%8A%E4%B8%80%E4%B8%8B%E4%BC%99%E4%BC%B4%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%B3%BB%E7%BB%9F%E6%9C%AA%E5%AE%8C)
-  * [8\.聊一下InnoDB的关键特性——未完](#8%E8%81%8A%E4%B8%80%E4%B8%8Binnodb%E7%9A%84%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7%E6%9C%AA%E5%AE%8C)
+  * [8\.聊一下InnoDB的关键特性](#8%E8%81%8A%E4%B8%80%E4%B8%8Binnodb%E7%9A%84%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7)
 * [（十）超级大问题](#%E5%8D%81%E8%B6%85%E7%BA%A7%E5%A4%A7%E9%97%AE%E9%A2%98)
   * [1\. 怎么优化MySQL？——未完待续](#1-%E6%80%8E%E4%B9%88%E4%BC%98%E5%8C%96mysql%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD)
   * [2\. MYISAM 和 InnoDB 有什么区别？——未完](#2-myisam-%E5%92%8C-innodb-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%E6%9C%AA%E5%AE%8C)
@@ -370,12 +375,19 @@ performance_schema实现机制遵循以下设计目标：
 
 
 
-## 7. 怎么理解MySQL对于SQL的执行是基于成本模型的？——未完
+## 7. 怎么理解MySQL对于SQL的执行是基于成本模型的？
 
-成本高的不一定执行速度慢
-	我该如何查看成本？
-	成本是怎么计算出来的？怎么查看？
-	优化器成本模型是什么？怎么选取最佳索引的
+总结一下几句很熟悉的话：
+
+MySQL是基于成本模型的。成本高的不一定执行速度快。
+
+那么夺命连环问来了：
+
+1. [那么什么是成本？什么是成本模型？](https://github.com/asdbex1078/MySQL/blob/master/mysql-optimization/MySQL%E6%9E%B6%E6%9E%84%E2%80%94%E2%80%94%E6%88%90%E6%9C%AC%E6%A8%A1%E5%9E%8B.md#%E4%BC%98%E5%8C%96%E5%99%A8%E6%88%90%E6%9C%AC%E6%A8%A1%E5%9E%8B)
+
+2. [成本是怎么计算出来的？我该如何查看成本？](https://github.com/asdbex1078/MySQL/blob/master/mysql-optimization/MySQL%E6%9E%B6%E6%9E%84%E2%80%94%E2%80%942.%E6%80%8E%E4%B9%88%E6%9F%A5%E7%9C%8B%E6%88%90%E6%9C%AC%E5%80%BC.md)
+
+3. 优化器怎么选取最佳索引的？
 
 
 
@@ -909,9 +921,90 @@ BLOB 和 TEXT 是为了存储很大的数据而设计的字符串类型。其中
 
 ---
 
-## 8. MySQL中，一个数据页只有16K，当一个字段特别大，超过16K了，怎么存储？——未完
+## 8. MySQL中，一个数据页只有16K，当一个字段特别大，超过16K了，怎么存储？
 
-数据行格式，比如COM.....会保存前700多字节的前缀，然后剩余的放在其他地方
+**VARCHAR(M)最多能存储的数据**
+
+我们知道对于`VARCHAR(M)`类型的列最多可以占用`65535`个字节。其中的`M`代表该类型最多存储的字符数量，如果我们使用`ascii`字符集的话，一个字符就代表一个字节，我们看看`VARCHAR(65535)`是否可用：
+
+```sql
+mysql> CREATE TABLE varchar_size_demo(
+    ->     c VARCHAR(65535)
+    -> ) CHARSET=ascii ROW_FORMAT=Compact;
+ERROR 1118 (42000): Row size too large. The maximum row size for the used table type, not counting BLOBs, is 65535. This includes storage overhead, check the manual. You have to change some columns to TEXT or BLOBs
+mysql>
+```
+
+从报错信息里可以看出，`MySQL`对一条记录占用的最大存储空间是有限制的，除了`BLOB`或者`TEXT`类型的列之外，其他所有的列（不包括隐藏列和记录头信息）占用的字节长度加起来不能超过`65535`个字节。所以`MySQL`服务器建议我们把存储类型改为`TEXT`或者`BLOB`的类型。这个`65535`个字节除了列本身的数据之外，还包括一些`storage overhead`，比如说我们为了存储一个`VARCHAR(M)`类型的列，需要占用3部分存储空间：
+
+- 真实数据
+- 真实数据占用字节的长度
+- `NULL`值标识，如果该列有`NOT NULL`属性则可以没有这部分存储空间
+
+如果该`VARCHAR`类型的列没有`NOT NULL`属性，那最多只能存储`65532`个字节的数据，因为真实数据的长度需要占用2个字节，`NULL`值标识需要占用1个字节：
+
+```sql
+mysql> CREATE TABLE varchar_size_demo(
+    ->      c VARCHAR(65532)
+    -> ) CHARSET=ascii ROW_FORMAT=Compact;
+Query OK, 0 rows affected (0.02 sec)
+```
+
+如果`VARCHAR`类型的列有`NOT NULL`属性，那最多只能存储`65533`个字节的数据，因为真实数据的长度需要占用2个字节，不需要`NULL`值标识：
+
+```sql
+mysql> DROP TABLE varchar_size_demo;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE varchar_size_demo(
+    ->      c VARCHAR(65533) NOT NULL
+    -> ) CHARSET=ascii ROW_FORMAT=Compact;
+Query OK, 0 rows affected (0.02 sec)
+```
+
+如果`VARCHAR(M)`类型的列使用的不是`ascii`字符集，那会怎么样呢？来看一下：
+
+```sql
+mysql> DROP TABLE varchar_size_demo;
+Query OK, 0 rows affected (0.00 sec)
+mysql> CREATE TABLE varchar_size_demo(
+    ->       c VARCHAR(65532)
+    -> ) CHARSET=gbk ROW_FORMAT=Compact;
+ERROR 1074 (42000): Column length too big for column 'c' (max = 32767); use BLOB or TEXT instead
+
+mysql> CREATE TABLE varchar_size_demo(
+    ->       c VARCHAR(65532)
+    -> ) CHARSET=utf8 ROW_FORMAT=Compact;
+ERROR 1074 (42000): Column length too big for column 'c' (max = 21845); use BLOB or TEXT instead
+```
+
+从执行结果中可以看出，如果`VARCHAR(M)`类型的列使用的不是`ascii`字符集，那`M`的最大取值取决于该字符集表示一个字符最多需要的字节数。比方说`gbk`字符集表示一个字符最多需要`2`个字节，那在该字符集下，`M`的最大取值就是`32767`，也就是说最多能存储`32767`个字符；`utf8`字符集表示一个字符最多需要`3`个字节，那在该字符集下，`M`的最大取值就是`21845`，也就是说最多能存储`21845`个字符。
+
+##### 记录中的数据太多产生的溢出
+
+我们以`ascii`字符集下的`varchar_size_demo`表为例，插入一条记录：
+
+```sql
+mysql> CREATE TABLE varchar_size_demo(
+    ->       c VARCHAR(65532)
+    -> ) CHARSET=ascii ROW_FORMAT=Compact;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO varchar_size_demo(c) VALUES(REPEAT('a', 65532));
+Query OK, 1 row affected (0.00 sec)
+```
+
+其中的`REPEAT('a', 65532)`是一个函数调用，它表示生成一个把字符`'a'`重复`65532`次的字符串。前边说过，`MySQL`中磁盘和内存交互的基本单位是`页`，也就是说`MySQL`是以`页`为基本单位来管理存储空间的，我们的记录都会被分配到某个`页`中存储。而一个页的大小一般是`16KB`，也就是`16384`字节，而一个`VARCHAR(M)`类型的列就最多可以存储`65532`个字节，这样就可能造成一个页存放不了一条记录的尴尬情况。
+
+在`Compact`和`Reduntant`行格式中，对于占用存储空间非常大的列，在`记录的真实数据`处只会存储该列的一部分数据，把剩余的数据分散存储在几个连续的页中，只在`记录的真实数据`处用20个字节存储指向这些页的地址，从而可以找到剩余数据所在的页，如图所示：
+
+![1.3.22.行溢出1.png](../mysql-image/1.3.22.行溢出1.png)
+
+从图中可以看出来，对于`Compact`和`Reduntant`行格式来说，如果某一列中的数据非常多的话，在本记录的真实数据处只会存储该列的前`786`个字节的数据和一个指向其他页的地址，然后把剩下的数据存放到其他页中，这个过程也叫做`行溢出`。画一个简图就是这样：
+
+![1.3.23.行溢出2.png](../mysql-image/1.3.23.行溢出2.png)
+
+不只是 ***VARCHAR(M)*** 类型的列，其他的 ***TEXT***、***BLOB*** 类型的列在存储数据非常多的时候也会发生`行溢出`。
 
 ---
 
@@ -943,7 +1036,41 @@ BLOB 和 TEXT 是为了存储很大的数据而设计的字符串类型。其中
 
 ---
 
-## 3.  select * from A group by a desc; 这么写对吗？为什么？——未完
+## 3.  select * from A group by a desc; 这么写对吗？为什么？
+
+首先，题目中这个写法是正确的。但，仅限于 MySQL8.0 版本以下。即 8.0 中这种写法是错的。
+
+**首先看MySQL5.7版本中一个普通的 group by 语句**：
+
+![image-20210126091741763](../mysql-image/面试题——三groupby语句.png)
+
+来看一下执行计划：
+
+![image-20210126091932450](../mysql-image/面试题——三groupby语句2.png)
+
+通过 explain 可以发现，Extra 中 Using temporary可以理解，分组需要临时表。但是为什么会有 Using filesort？此时返回去，看第一张图，会发现 user_age 是从小到大排序过的。
+
+原因：MySQL8.0 以下，group by 之后默认会有一个排序的操作（隐式排序），且这个sql没有走索引，所以既需要临时表，又需要文件内排序。由此，可以按照 user_age 降序输出：
+
+![image-20210126092213428](../mysql-image/面试题——三groupby语句3.png)
+
+但是很多时候，分组之后并没有排序的需求，则可以这么优化SQL：后边加一个 order by null
+
+![image-20210126092610170](../mysql-image/面试题——三groupby语句4.png)
+
+来看看执行计划：没有了文件内排序。故此举可以优化一些性能。
+
+![image-20210126092727979](../mysql-image/面试题——三groupby语句5.png)
+
+
+
+**MySQL8.0中，直接报语法错误。因为 8.0 性能作了提升，去掉了隐式排序**
+
+![image-20210126093251261](../mysql-image/面试题——三groupby语句6.png)
+
+所以，如果你曾经写过这中sql，突然升级到 MySQL8.0 会不支持这个语法。修改方案就是明确写明 order by。
+
+![image-20210126093810843](../mysql-image/面试题——三groupby语句7.png)
 
 ---
 
@@ -967,11 +1094,67 @@ BNL
 
 ---
 
-## 8. union 和 union all的区别？——未完
+## 8. 怎么优化 union 查询？
+
+MySQL在执行union查询的时候，会创建临时表，并往临时表里填充数据，因此很多优化策略在union查询中都没法很好的使用。**经常需要手工的将where、limit、order by等子句下推到各个子查询中，以便优化器可以充分利用这些条件进行优化。**
+
+```sql
+(select user_name,user_province,user_sex from user1 where user_age = 12)
+union
+(select user_name,user_province,user_sex from user2 where user_age = 12) limit 20;
+```
+
+例如，以上sql，这个sql会把 user1中 符合条件的所有数据，和 user2 中符合条件的所有数据，存放在一个临时表中，再从临时表中取出前20条。性能可想而知。
+
+优化方案就是将 limit 条件下推到子查询中：
+
+```sql
+(select user_name,user_province,user_sex from user1 where user_age = 12 limit 20)
+union
+(select user_name,user_province,user_sex from user2 where user_age = 12 limit 20) limit 20;
+```
+
+这样一来，临时表中就只有40条数据，然后再取前20条。
+
+但是，临时表中的数据是从两个表中获取的，可能取出数据时顺序不一致，此时 在最外层 order by 一下即可(但是又增加了排序的性能问题)。
+
+```sql
+(select user_name,user_province,user_sex from user1 where user_age = 12 limit 20)
+union
+(select user_name,user_province,user_sex from user2 where user_age = 12 limit 20) order by user_name limit 20;
+```
+
+> 该题和答案采自《高性能MySQL 第三版》
 
 ---
 
-## 9.一些有趣的问题
+## 9.union 和 union all的区别？
+
+union 和 union all 区别就是union all 中的结果会重复，union的结果不会重复。
+
+union 语句的执行计划如下：
+
+![image-20210122093446294](../mysql-image/面试题——unionAll1.png)
+
+union all 语句的执行计划如下：
+
+![image-20210122093638470](../mysql-image/面试题——unionAll2.png)
+
+可以很明显的看到，union 查询多了一个对临时表进行去重的过程。
+
+故，除非确实需要服务器消除重复的行，否则一定要使用union all，因此没有all关键字，mysql会在查询的时候给临时表加上distinct的关键字，这个操作的代价很高。
+
+建议使用 union all，可以考虑去程序中去重。
+
+---
+
+## 10.alter table 语句的本质是什么？怎么快速给一个大表加一个列？
+
+[参考这里](https://blog.csdn.net/qq_34275277/article/details/111684122)
+
+---
+
+## 11.一些有趣的问题
 
 ### (1) select sid from sc where score < 60 group by sid;  与 select distinct sid from sc where score < 60; 相比性能如何？
 
@@ -989,7 +1172,25 @@ id非主键有索引，score有索引，索引失效；
 
 # （四）索引方面的问题
 
-## 1. 索引有哪些类型？怎么分类呢？——未完
+## 1. 索引有哪些类型？怎么分类呢？
+
+先看分类：(脑图已上传[点击这里](https://github.com/asdbex1078/MySQL/tree/master/mysql-%E9%9D%A2%E8%AF%95%E9%A2%98/%E8%84%91%E5%9B%BE%E9%9B%86%E5%90%88))
+
+![image-20210127095544711](../mysql-image/面试题——四索引分类.png)
+
+索引的分类涉及到很多角度，站在不同的角度，同一个索引会有不同的称呼。
+
+主键索引：站在逻辑分类下，约束性的角度叫主键索引，但是站在物理分类下，若是InnoDB表，他的名字叫做聚簇索引；若是MYISAM表，他的名字叫做非聚簇索引。
+
+唯一索引 / 普通索引：站在逻辑分类下约束性的角度叫唯一索引或普通索引，但是站在物理分类下，不管是InnoDB表还是MYISAM表，他的名字叫做非聚簇索引。
+
+哈希索引：站在数据结构的角度来看，他叫哈希索引。站在单列或多列的角度上看，他是单列索引。
+
+所以说，一个索引他会有很多的称呼，尽量用词准确。在哪个角度下的称呼，是为了区分同类型下的其他索引。不要一会儿说主键索引，一会儿说聚簇索引，角度跳过来跳过去。
+
+> 关于详细的索引介绍，会在后边面试题中列出来。
+
+
 
 ---
 
@@ -1001,7 +1202,30 @@ id非主键有索引，score有索引，索引失效；
 
 ---
 
-## 4. 聚簇索引和非聚簇索引有什么区别?——未完
+## 4. 聚簇索引和非聚簇索引有什么区别?
+
+每个InnoDB的表都拥有一个特殊索引，此索引中存储着行记录（称之为聚簇索引Clustered Index），**一般来说，聚簇索引是根据主键生成的**。聚簇索引按照如下规则创建：1、当定义了**主键**后，InnoDB会利用主键来生成其聚簇索引；2、如果没有主键，InnoDB会选择一个**非空的唯一索引**来创建聚簇索引；3、如果这也没有，InnoDB会**隐式的创建一个自增的列(rowid)**来作为聚簇索引。
+
+除了主键索引之外的索引，称为**二级索引**（Secondary Index）。二级索引又名辅助索引。
+
+二级索引可以有多个，二级索引建立在经常查询的列上。与聚簇索引的区别在于二级索引的叶子节点中存放的是除了**这几个列**外用来回表的**主键的值**。
+
+所谓回表：就是在使用二级索引时，因为二级索引只存储了部分数据，如果根据键值查找的数据不能包含全部目标数据，就需要根据二级索引的叶子节点中的主键值，去查聚簇索引的全部数据。然后根据完整数据取出所需要的列。这种在二级索引不能找到全部列的现象称为**“非索引覆盖”**，需要两次B+树查询，反之称为**索引覆盖**。所以索引需要平衡考虑，多建索引有利于查询，但是占用空间大还影响写入性能。即索引要精有用。
+
+这样的优势：1、由于行数据和叶子节点存储在一起，这样主键和行数据是一起被载入内存的，找到叶子节点就可以立刻将行数据返回了，如果按照主键Id来组织数据，获得数据更快。2 、辅助索引使用主键值作为"指针" 而不是使用地址值作为指针的好处是，减少了当出现行移动或者数据页分裂时辅助索引的维护工作，使用主键值当作指针会让辅助索引占用更多的空间，换来的好处是**InnoDB在移动行时无须更新辅助索引中的这个"指针"**。也就是说行的位置（实现中通过16K的Page来定位）会随着数据库里数据的修改而发生变化（包括B+树节点分裂以及Page的分裂），使用主键的值就可以保证不管这个主键B+树的节点如何变化，辅助索引树都不受影响。
+
+故，相对来说，在 MYISAM 中，他的索引全部都是非聚集索引。
+
+在 InnoDB 中二级索引等价于非聚簇索引。在 MYISAM 中，非聚簇索引不等价于二级索引。
+
+InnoDB 的非聚集索引 和 MYISAM 非聚集索引的区别就是：InnoDB 非聚集索引的叶子节点中存放的是**索引列的数据 + 对应的主键值**。而 MYISAM 非聚集索引的叶子节点中存放的是**索引列的数据 + 指向真实数据的指针**。
+
+![聚簇索引和非聚簇索引的对比](../mysql-image/聚簇索引和非聚簇索引的对比.jpg)
+
+> 延伸阅读：
+>
+> 1. [聚簇索引和非聚簇索引](https://aafdc5f3.wiz06.com/wapp/pages/view/share/s/2G_snP1IAAKJ2pDKXw2gROYt05A5Bk2Q8Qet2Wi6kD2p5uhc)
+> 2. [索引覆盖](https://aafdc5f3.wiz06.com/wapp/pages/view/share/s/2G_snP1IAAKJ2pDKXw2gROYt2RqQk-1bTQKI2ZeT_v3NEVhk)
 
 ---
 
@@ -1030,7 +1254,7 @@ Memory引擎使用的索引，对列进行hash，查询时直接进行比较操�
 
 ---
 
-## 9. 为什么使用B+树，不用二叉树，平衡二叉树，B树？——未完
+## 9. 为什么使用B+树作为索引的数据结构，不用二叉树，平衡二叉树，B树？
 
 https://juejin.im/post/6844904193463943175
 
@@ -1080,7 +1304,7 @@ https://juejin.im/post/6863832433062739981
 
 ---
 
-## 18. 聊一聊十大经典排序算法？为什么MySQL中 选择了归并排序？——未完
+## 18. 聊一聊十大经典排序算法？MySQL中使用了哪些排序算法？——未完
 
 ---
 
@@ -1123,10 +1347,11 @@ Change Buffer中的 Insert Buffer，针对非唯一索引做出的优化，随�
 
 1. 任何字段都可以建立索引，只是，有时候不建议建立索引，比如性别，重复性太高，为百分之50。
 
+   - 性别这个字段的基数为 2，也就是说只有男女两个不同的值；平均值组大小为 (总数据量/2) ，重复比例占到50%，[平均值组基数等概念参考这里](https://github.com/asdbex1078/MySQL/blob/master/mysql-optimization/%E7%B4%A2%E5%BC%95%E2%80%94%E2%80%94%E5%B9%B3%E5%9D%87%E5%80%BC%E7%BB%84%E5%A4%A7%E5%B0%8F%E5%8F%8ASHOW%20INDEX%E4%BF%A1%E6%81%AF.md#%E5%B9%B3%E5%9D%87%E5%80%BC%E7%BB%84%E5%A4%A7%E5%B0%8F)
    - 当MySQL走一个索引，需要扫描的数据量达到全表的百分之30时，就不考虑这个索引了，更何况性别达到了50%。
    - 随着MySQL版本升级，要求的比例远低于百分之30。加入了其他考虑因素，就是MySQL的成本模型，考虑cpu io等
 
-2. 可以强制让MySQL走性别这个索引，比如100w条数据，查询性别为男的数据就有50w条。可以强制走性别这个索引。在底层实现上，50W个性别为男的数据页需要先放到缓冲池中，在缓冲池中找到对应的 50w 个主键ID，再**回表**查50w条最终结果，性能消耗上已经不亚于全表扫描。
+2. 可以强制让MySQL走性别这个索引，比如100w条数据，查询性别为男的数据就有50w条。可以强制走性别这个索引。在底层实现上，50W个性别为男的数据页需要依次放到缓冲池中，在缓冲池中依次找到对应的 50w 个主键ID，再**回表**查50w条最终结果，性能消耗上已经不亚于全表扫描。
    极端情况下，表中全部都是同一性别，则会扫描整棵索引树 + 全部数据。这就是不建议给性别建立单列索引的原因。
 
 3. 解决方案：可以把性别和其他字段建立复合索引，性别放前面，当需要查询其他字段时，对性别in查询，是可以走索引的。这就是选择性极低的放最前面的原理。**这样设计可以巧妙的利用索引，最终设计方案需按业务需求来定。**
@@ -1168,7 +1393,7 @@ Change Buffer中的 Insert Buffer，针对非唯一索引做出的优化，随�
    ![案例二explain情况](../mysql-image/面试题三——案例二explain情况.jpg)
 
    **其中，体会一下案例二中，age放最后的好处。age放最后，可以进行范围查询，那么问题又来了：为什么放最后？因为范围查询之后会索引失效。那为什么范围查询之后，会索引失效？且听之后分解~**
-   
+
    > 另外，idx_sex_province_city_area_age一个索引，可以实现以下多种功能
    >
    > 1. 查某个省的总人数 / 某个省某个性别的人数
@@ -1188,7 +1413,24 @@ Change Buffer中的 Insert Buffer，针对非唯一索引做出的优化，随�
 
 ---
 
-## 28. 假设我没有索引，该怎么优化SQL？——未完
+## 28. 假设我没有索引，该怎么优化SQL？
+
+首先需要明确，这里的没有索引，是指全表没有索引，还是查询条件中的那一列没有索引。这有着很大的区别。
+
+以下几点，适用于全表无索引，或查询条件中的列无索引：
+
+1. 减少不必要的内存，如不使用select *。
+2. 减少返回行数，有时候不需要返回全部行，则使用limit
+3. 给innodb很大的缓冲池，将服务器的5%内存交给MySQL。甚至加大mysql所在服务器内存。
+4. 视情况强行改变读表顺序，先查小表后查大表，配合limit使用，可最终的减少扫描行数
+5. 调整sql写法，避免与其他事务发生死锁或造成其他事物锁等待
+
+以下适用于查询条件中的列无索引，但有其他索引的情况
+
+1. 如果能够利用其他有业务关联的索引卡条件也可以，比如某一张表的创建时间有索引，则可以根据大概的创建时间范围卡数据。
+2. 若条件有多个则考虑创建联合索引，利用最佳左前缀原则，且，选择性极低的放前面，可以巧妙的利用到索引（这一点前面面试题提到过）
+3. 条件只有单个列，并允许创建索引，则建一个索引
+4. 常规性优化，比如子查询优化，group by优化啦，union 优化，count优化等，既然这一列无索引，那就把其他方面优化好
 
 ---
 
@@ -1202,7 +1444,9 @@ Change Buffer中的 Insert Buffer，针对非唯一索引做出的优化，随�
 
 ## 2. order by排序有哪两种算法？——未完
 
-排序两种算法，两次传输排序和单次传输排序。order by时，尽量使用第一张表的字段进行排序，性能不一样，explain不一样，不是第一张表的会多一个使用临时表
+排序两种算法，两次传输排序和单次传输排序。order by时，尽量使用第一张表的字段进行排序，性能不一样，explain不一样，不是第一张表的会多一个使用临时表。
+
+
 
 ---
 
@@ -1241,15 +1485,36 @@ Change Buffer中的 Insert Buffer，针对非唯一索引做出的优化，随�
 
 ## 6. 分布式事务解决方案？——未完
 
+TCC
+
+门面模式
+
 ---
 
 # （七）日志类问题
 
-## 1. redo log 和 bin log有什么区别？——未完
+## 1. redo log 和 bin log有什么区别？
+
+[参考这里](https://github.com/asdbex1078/MySQL/blob/master/mysql-storage-engines/innodb/1.4.6.Mysql%E6%96%87%E4%BB%B6%E2%80%94%E2%80%94bin%20log%E5%92%8Credo%20log%E7%9A%84%E5%8C%BA%E5%88%AB.md#%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6-%E5%92%8C-%E9%87%8D%E5%81%9A%E6%97%A5%E5%BF%97-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB)
 
 ---
 
-## 2.事务提交时，redo log和binlog的写入顺序是怎样的——未完
+## 2.事务提交时，redo log和binlog的写入顺序是怎样的？
+
+这道题重点是考 **两阶段提交**。
+
+事务开始之后就产生redo log，redo log的落盘并不是随着事务的提交才写入的，而是在事务的执行过程中，便不断写入redo log文件中。一般情况下，innodb_flush_log_at_trx_commit 设置为1，代表每次事务commit时，必须调用 fsync 操作，将重做日志缓冲同步写到磁盘。另外，bin log中 sync_binlog参数设为1，每次事务提交时同步写到磁盘bin log中。 
+
+那么就有了一个谁先谁后的问题：redo log 先，bin log 后。
+
+两阶段提交的内容：**事务提交时，redo log处于 pre状态  -> 写入bin log  -> 事务真正提交。  **
+
+当发生崩溃恢复时，查看的是bin log是否完整，如果bin log完整，则代表事务已经提交。
+
+如果在两阶段提交过程中，bin log写入失败，则事务无法终止提交，崩溃恢复时就不需要重做。如果bin log写完的一瞬间，服务器宕机了，事务都来不及提交，此时bin log并不是完整的，缺少了最终的commit标记。因此也是提交失败。
+
+简单说，redo log和bin log都可以用于表示事务的提交状态，而两阶段提交就是让这两个状态保持逻辑上的一致。
+
 ## 3.redo log什么时候释放？undo log什么时候释放？——未完
 ## 4.什么是write-Ahead Log策略？——未完
 
@@ -1257,9 +1522,9 @@ Change Buffer中的 Insert Buffer，针对非唯一索引做出的优化，随�
 
 ## 6.关心过业务系统里面的sql耗时吗?统计过慢查询吗?对慢查询都怎么优化过?——未完
 
-## 7.总结一下 bin-log 和 redo-log 的刷脏参数？
+## 7.总结一下 bin-log 和 redo-log 的刷脏参数？——未完
 
-## 8.聊一下 WAL 策略？
+## 8.聊一下 WAL 策略？——未完
 
 
 
@@ -1281,36 +1546,268 @@ Change Buffer中的 Insert Buffer，针对非唯一索引做出的优化，随�
 
 ## 10.什么是间隙锁，有什么好处和坏处？——未完
 
+## 11. 多个事务插入数据时，会造成死锁。分析一下过程？
+
+[参考这里](https://github.com/asdbex1078/MySQL/blob/master/mysql-optimization/MySQL%E9%94%81%E2%80%94%E2%80%94%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE%E6%AD%BB%E9%94%81%E5%88%86%E6%9E%90.md)
+
 ---
 
 # （九）InnoDB类问题
 
-## 1.什么是缓冲池？有什么用？——未完
-## 2.聊一聊LRU算法，InnoDB是怎么实现LRU的？——未完
-## 3.聊一聊InnoDB架构，各组成部分有什么用？——未完
+## 1.什么是缓冲池？有什么用？
+
+一句话概述，就是磁盘IO太慢，放到内存中，极大提升性能。
+
+详细介绍，查看这里：[缓冲池](https://github.com/asdbex1078/MySQL/blob/master/mysql-storage-engines/innodb/1.2.0.InnoDB%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E7%BC%93%E5%86%B2%E6%B1%A0.md#%E7%BC%93%E5%86%B2%E6%B1%A0)
+
+## 2.聊一聊LRU算法，InnoDB是怎么实现 LRU 的？
+
+按照英文的直接原义就是Least Recently Used,最近最久未使用。
+
+它是按照一个非常著名的计算机操作系统基础理论得来的：**最近使用的页面数据会在未来一段时期内仍然被使用,已经很久没有使用的页面很有可能在未来较长的一段时间内仍然不会被使用**。基于这个思想,会存在一种缓存淘汰机制，每次从内存中找到**最久未使用的数据然后置换出来**，从而存入新的数据！
+
+InnoDB中，新增了midPoint位置。新读取到的页并没有直接放在LRU列的首部，而是放在距离尾部37%的位置( 3/8的位置 )。这个算法称之为**midpoint insertion stategy**。并且该位置是可以调整的！
+
+> 常见的算法类面试题：手写一个 LRU ?
+
+详细介绍在缓冲池这里已经介绍过。[LRU list](https://github.com/asdbex1078/MySQL/blob/master/mysql-storage-engines/innodb/1.2.0.InnoDB%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E7%BC%93%E5%86%B2%E6%B1%A0.md#lru-list)
+
+## 3.聊一聊InnoDB架构，各组成部分有什么用？
+
+[InnoDB架构参考这里](https://github.com/asdbex1078/MySQL/blob/master/mysql-storage-engines/innodb/1.0.MySQL%E6%9E%B6%E6%9E%84%E5%88%B0innoDB%E6%9E%B6%E6%9E%84.md#innodb)
+
+[InnoDB的关键特性](https://github.com/asdbex1078/MySQL/blob/master/mysql-storage-engines/innodb/1.1.1.InnoDB%E2%80%94%E2%80%94%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7.md#innodb%E7%9A%84%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7)
 
 ## 4.脏页刷盘机制是什么？脏页刷盘过程中，服务器或MySQL宕机了怎么办？——未完
 
 
 
-## 5.什么是页？怎么理解页？——未完
+## 5.什么是页？怎么理解页？
 
-一般情况下，页的大小为16K，压缩页可以达到2K、4K、8K
-页是怎么存储的？
-为什么一个页中，至少要有 1/32 的剩余空间？
-InnoDB每次将数据所在的页16K，加载到缓冲池中，怎么从数据页中获取到最终结果？循环遍历16K？
+**（1）什么是页？**
 
-## 6.怎么查看 InnoDB 状态？能看到什么信息？——未完
+页是Innodb存储的**最基本结构**，也是Innodb磁盘管理的最小单位，与数据库相关的所有内容都存储在页结构里。
+
+**（2）页的分类**
+
+页分为几种类型：**数据页（B-Tree Node），Undo页（Undo Log Page），系统页（System Page），事务数据页（Transaction System Page）**等；每个数据页的大小为16kb，每个页使用一个32位（一位表示的就是0或1）的int值来表示，正好对应Innodb最大64TB的存储容量(16kb * 2^32=64tib)，故innodb最大可存64TB数据。
+
+**（3）举例**
+
+拿一颗三阶 B+树 解释什么是数据页：**每一个节点都是一个页**。
+
+![image-20210115090843130](../mysql-image/三阶B+树.png)
+
+即 如下图所示：
+
+![image-20210115091352101](../mysql-image/三阶B+树中的页.png)
+
+每次读取数据时，都会抓取一页放到内存中！
+
+> 页内结构详细参考这篇文章，建议看懂：[InnoDB逻辑存储结构](https://github.com/asdbex1078/MySQL/blob/master/mysql-storage-engines/innodb/1.3.0.InnoDB%E7%A3%81%E7%9B%98%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E9%80%BB%E8%BE%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84.md#innodb%E9%A1%B5%E9%80%BB%E8%BE%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84)
+>
+> 关于 InnoDB缓冲池 的介绍中也涉及到了“页”：[InnoDB缓冲池](https://github.com/asdbex1078/MySQL/blob/master/mysql-storage-engines/innodb/1.2.0.InnoDB%E5%86%85%E5%AD%98%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E7%BC%93%E5%86%B2%E6%B1%A0.md#%E7%BC%93%E5%86%B2%E6%B1%A0)
+
+**（4）额外知识点**
+
+- 默认情况下，页的大小为16K，但是压缩页可以达到2K、4K、8K。关于压缩页，参考[官网InnoDB页面压缩](https://dev.mysql.com/doc/refman/5.7/en/innodb-page-compression.html)
+- 为什么一个页中，至少要有 1/32 的剩余空间？
+  答案：按照一般情况来说，一页为16K，16 * 1024 / 32 = 512 B。从磁盘的物理结构来看存取信息的最小单位是扇区，一个扇区大小为 512 B.
+- InnoDB每次将数据所在的页16K，加载到缓冲池中，怎么从数据页中获取到最终结果？循环遍历16K？
+  答案：循环遍历16K的数据肯定性能很差。数据存入页中时，会将数据分组，抽出关键的几个数值，放到槽里。当此16k的数据页加载到缓冲池中时，对槽进行二分查找便可快速找到最终需要的数据。详细解释点击这里：[InnoDB逻辑存储结构](https://github.com/asdbex1078/MySQL/blob/master/mysql-storage-engines/innodb/1.3.0.InnoDB%E7%A3%81%E7%9B%98%E7%BB%93%E6%9E%84%E2%80%94%E2%80%94%E9%80%BB%E8%BE%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84.md#%E9%A1%B5%E7%9A%84%E7%BB%93%E6%9E%84)
+
+## 6.怎么查看 InnoDB 状态？能看到什么信息？
+
+```properties
+=====================================
+2022-02-02 08:15:59 0x1b34 INNODB MONITOR OUTPUT
+=====================================
+Per second averages calculated from the last 31 seconds
+-----------------
+BACKGROUND THREAD
+-----------------
+srv_master_thread loops: 187 srv_active, 0 srv_shutdown, 426130 srv_idle
+srv_master_thread log flush and writes: 426317
+----------
+SEMAPHORES
+----------
+OS WAIT ARRAY INFO: reservation count 127
+OS WAIT ARRAY INFO: signal count 121
+RW-shared spins 0, rounds 1701, OS waits 98
+RW-excl spins 0, rounds 34, OS waits 0
+RW-sx spins 1, rounds 22, OS waits 0
+Spin rounds per wait: 1701.00 RW-shared, 34.00 RW-excl, 22.00 RW-sx
+------------------------
+LATEST FOREIGN KEY ERROR
+------------------------
+2021-01-20 13:43:51 0x2d9c Error in foreign key constraint of table testmybatis/emp:
+foreign key (deptno) references dept (deptno)
+ ):
+Cannot resolve table name close to:
+ (deptno)
+ )
+------------
+TRANSACTIONS
+------------
+Trx id counter 1567714
+Purge done for trx's n:o < 1567713 undo n:o < 0 state: running but idle
+History list length 13
+LIST OF TRANSACTIONS FOR EACH SESSION:
+---TRANSACTION 284004297169560, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+---TRANSACTION 284004297168688, not started
+0 lock struct(s), heap size 1136, 0 row lock(s)
+--------
+FILE I/O
+--------
+I/O thread 0 state: wait Windows aio (insert buffer thread)
+I/O thread 1 state: wait Windows aio (log thread)
+I/O thread 2 state: wait Windows aio (read thread)
+I/O thread 3 state: wait Windows aio (read thread)
+I/O thread 4 state: wait Windows aio (read thread)
+I/O thread 5 state: wait Windows aio (read thread)
+I/O thread 6 state: wait Windows aio (write thread)
+I/O thread 7 state: wait Windows aio (write thread)
+I/O thread 8 state: wait Windows aio (write thread)
+I/O thread 9 state: wait Windows aio (write thread)
+Pending normal aio reads: [0, 0, 0, 0] , aio writes: [0, 0, 0, 0] ,
+ ibuf aio reads:, log i/o's:, sync i/o's:
+Pending flushes (fsync) log: 0; buffer pool: 0
+87062 OS file reads, 2454 OS file writes, 577 OS fsyncs
+0.00 reads/s, 0 avg bytes/read, 0.84 writes/s, 0.00 fsyncs/s
+-------------------------------------
+INSERT BUFFER AND ADAPTIVE HASH INDEX
+-------------------------------------
+Ibuf: size 1, free list len 203, seg size 205, 0 merges
+merged operations:
+ insert 0, delete mark 0, delete 0
+discarded operations:
+ insert 0, delete mark 0, delete 0
+Hash table size 2267, node heap has 0 buffer(s)
+Hash table size 2267, node heap has 0 buffer(s)
+Hash table size 2267, node heap has 0 buffer(s)
+Hash table size 2267, node heap has 0 buffer(s)
+Hash table size 2267, node heap has 0 buffer(s)
+Hash table size 2267, node heap has 0 buffer(s)
+Hash table size 2267, node heap has 0 buffer(s)
+Hash table size 2267, node heap has 1 buffer(s)
+0.00 hash searches/s, 0.00 non-hash searches/s
+---
+LOG
+---
+Log sequence number 2461771042
+Log flushed up to   2461771042
+Pages flushed up to 2461771042
+Last checkpoint at  2461771033
+0 pending log flushes, 0 pending chkp writes
+271 log i/o's done, 0.00 log i/o's/second
+----------------------
+BUFFER POOL AND MEMORY
+----------------------
+Total large memory allocated 8585216
+Dictionary memory allocated 495865
+Buffer pool size   512
+Free buffers       255
+Database pages     256
+Old database pages 0
+Modified db pages  0
+Pending reads      0
+Pending writes: LRU 0, flush list 0, single page 0
+Pages made young 0, not young 0
+0.00 youngs/s, 0.00 non-youngs/s
+Pages read 86714, created 726, written 1927
+0.00 reads/s, 0.74 creates/s, 0.84 writes/s
+Buffer pool hit rate 1000 / 1000, young-making rate 0 / 1000 not 0 / 1000
+Pages read ahead 0.00/s, evicted without access 0.00/s, Random read ahead 0.00/s
+LRU len: 256, unzip_LRU len: 0
+I/O sum[26]:cur[0], unzip sum[0]:cur[0]
+--------------
+ROW OPERATIONS
+--------------
+0 queries inside InnoDB, 0 queries in queue
+0 read views open inside InnoDB
+Process ID=4616, Main thread ID=7112, state: sleeping
+Number of rows inserted 27238, updated 15, deleted 22, read 41698497
+26.45 inserts/s, 0.00 updates/s, 0.00 deletes/s, 36.58 reads/s
+----------------------------
+END OF INNODB MONITOR OUTPUT
+============================
+```
+
+
+**第一种方式：show engine innodb status**
+
+- Status：显示时间戳、监视器名称和平均每秒所基于的秒数。秒数是指从当前时间到InnoDB监视器输出最后一次打印之间经过的时间。
+
+- BACKGROUND THREAD：srv_master_thread行显示了主后台线程所完成的工作。
+
+- SEMAPHORES：等待信号量的线程，以及关于线程需要旋转或等待互斥锁或rwlock信号量的统计数据。大量等待信号量的线程可能是由于磁盘I/O或InnoDB内部的争用问题造成的。争用可能是由于查询的高度并行性或操作系统线程调度中的问题。在这种情况下，将innodb_thread_concurrency系统变量设置为小于默认值可能会有所帮助。每个等待行的自旋轮数显示了每个操作系统等待互斥的自旋锁轮数。
+  Mutex信息由 SHOW ENGINE INNODB MUTEX; 查看。
+
+- LATEST FOREIGN KEY ERROR：提供关于最近的外键约束错误的信息。如果没有这样的错误发生就没有这一项。内容包括失败的语句，以及关于失败的约束以及被引用和正在引用的表的信息。
+
+- **LATEST DETECTED DEADLOCK：提供关于最近死锁的信息。如果没有死锁发生，它就不存在。内容显示了涉及哪些事务，每个事务都试图执行的语句，它们拥有和需要的锁，以及InnoDB决定回滚哪个事务来打破死锁。**
+
+- **TRANSACTIONS：如果这部分报告锁等待,您的应用程序可能会锁争用。输出还可以帮助跟踪事务死锁的原因。**
+
+- FILE I/O：本节提供有关InnoDB用于执行各种I / O的线程的信息 。其中的前几个专用于常规 InnoDB处理。内容还显示有关挂起的I / O操作的信息和有关I / O性能的统计信息。
+  这些线程的数量由innodb_read_io_threads和 innodb_write_io_threads 参数控制 。
+
+  1. insert buffer thread
+  2. log thread
+  3. read thread
+  4. write thread
+
+- INSERT BUFFER AND ADAPTIVE HASH INDEX：本节显示了 InnoDB插入缓冲区（也称为更改缓冲区）和自适应哈希索引的状态。
+
+  - Ibuf：
+    1. seg size：当前Insert Buffer大小，205 x 16KB
+    2. free list len： 空闲列表长度
+    3. size ：已经合并页的数量
+
+  - merged operations：
+    1. insert：Insert Buffer
+    2. delete mark：Delete Buffer
+    3. delete：purge Buffer
+
+  - discarded operations：表示Change Buffer发生改变时，表已被删除，因此无需将记录合并到辅助索引
+
+- **LOG：本部分显示有关InnoDB日志的信息 。内容包括当前日志序号，已将日志刷新到磁盘的“距离”以及InnoDB上次执行检查点的位置 。**（请参见 第14.12.3节“ InnoDB检查点”。）本节还显示有关挂起写入和写入性能统计信息。
+
+- BUFFER POOL AND MEMORY：本节为您提供有关已读和已写页面的统计信息。您可以从这些数字中计算出查询当前正在执行多少个数据文件I / O操作。
+
+  - buffer pool size：512（缓冲池大小）512代表512个页，大小为512 * 16KB
+  - Free buffers： 370（Free list大小）
+  - Database pages：138（LRU list大小）可以看到Free list + LRU list 不等于 缓冲池大小，因为缓冲池中还有其他区域需要占用页
+  - Modified db pages：0 （Flush list大小）
+  - Pages made young：LRU列表中数据页移动到前端的次数
+  - **Buffer pool hit rate：缓冲池的命中率**
+  - LRU len: 138：LRU列表页数量
+  - unzip_LRU len: 0：压缩页数量
+    注意：LRU包含了unzip_LRU的数量
+
+- ROW OPERATIONS：本节显示了主线程在做什么，包括每种行操作的数量和性能比率。
+
+**第二种方式：infomation_schema库下**
+
+- INNODB_BUFFER_POOL_STATS：缓冲池状态，包含LRU list、Free list、Flush list大小，频率、缓冲命中率等
+- INNODB_BUFFER_PAGE_LRU：查看LRU列表中每个页的具体信息
+- INNODB_BUFFER_PAGE    
+
+---
+
 ## 7.聊一下伙伴内存分配系统——未完
 
-## 8.聊一下InnoDB的关键特性——未完
+## 8.聊一下InnoDB的关键特性
 
-change Buffer
-Double Write
-AIO
-刷新临近页
-AHI-自适应哈希索引
-预读
+- change Buffer
+- Double Write
+- AIO
+- 刷新临近页
+- AHI-自适应哈希索引
+- 预读
+
+详细的介绍，查看这里：[InnoDB的关键特性](https://github.com/asdbex1078/MySQL/blob/master/mysql-storage-engines/innodb/1.1.1.InnoDB%E2%80%94%E2%80%94%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7.md#innodb%E7%9A%84%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7)
 
 ---
 
@@ -1319,7 +1816,10 @@ AHI-自适应哈希索引
 ## 1. 怎么优化MySQL？——未完待续
 
 1. 硬件级别：
-   	**CPU、磁盘IO读写速度、服务器内存大小、带宽都是影响MySQL效率的因素。其中最重要的是CPU、IO、内存大小。**
+   	- **CPU、磁盘IO读写速度、服务器内存大小、带宽都是影响MySQL效率的因素。其中最重要的是CPU、IO、内存大小。**
+      	- 尽量采用SSD固态硬盘
+       - 加大服务器内存，采用高端的CPU
+       - 磁盘RAID架构下，锂电池的定时充放电会引起数据库性能抖动
 2. 选择合适的存储引擎
    - MYISAM：使用于读多写少，甚至不需要写的情况
    - InnoDB：主流储存引擎，默认存储引擎。
@@ -1341,6 +1841,9 @@ AHI-自适应哈希索引
 6. 锁机制
    - 索引不仅用于快速查询，也用来避免不必要的加锁，不合适的sql不加索引会锁全表数据
    - 尽量按顺序编写sql，避免死锁，避免锁等待
+7. 主从复制
+8. 分库分表
+9. 故障转移
 
 
 
@@ -1349,6 +1852,65 @@ AHI-自适应哈希索引
 ## 2. MYISAM 和 InnoDB 有什么区别？——未完
 
 InnoDB为什么在 count(1) 方面不如 MYISAM
+
+
+
+---
+
+# （十一）笔试题
+
+## 1. 有下面两张表，user(用户表)和thread(帖子表)，假设50W用户，500W帖子，写一条SQL，显示 前10名发帖最多的用户的名字及帖子数量，并针对该语句支出如何设计合理的索引字段。如何确认你写的sql会用到哪个索引，另外请说明你写的sql是否是最优解。
+
+| 表名   | 字段                                  |
+| ------ | ------------------------------------- |
+| user   | uid，username，password，create_time  |
+| thread | tid，uid，title，content，create_time |
+
+```sql
+// 先从thread表中查出10条数据，在内连接user表
+// 这里认为 uid 是user表的主键，tid是thread的主键
+SELECT
+ u.username,
+ b.count 
+FROM
+USER as u
+inner join ( SELECT count(uid) AS count,uid FROM thread GROUP BY uid ORDER BY count DESC LIMIT 10 ) as b
+WHERE
+ u.uid = b.uid
+ limit 10;
+```
+
+建立索引方面，由于主键不明，所以不好定论，如果user表中uid是主键，并且thread表中tid是主键，则只需要给user表加username索引，给thread表中uid加索引即可；
+
+若uid不是user表的主键，tid不是thread表的主键则，给user表中uid和username设立联合索引，thread中tid 和 uid设立索引 。
+
+如何确认sql用到了那个索引，从理论上，
+
+1. group by中用到了uid，给thread表uid建立索引可以用到；
+2. 连表查询时，需要给后一张表的字段加索引。所以thread表建uid是对的
+3. 要从user表中查username，若uid不是主键，则需要建立uid + username联合索引，只需要扫描辅助索引树即可。不需要回表
+4. 如果要确认，需要实际操作，explain查看执行计划
+
+是不是最优解：
+
+需要看目前这个sql执行时间多久，200毫秒以内绝对没问题。肯定有其他写法，需要通过验证才能知道是不是最优。
+
+> 这里面涉及到的知识点：
+>
+> 1. 聚簇索引，非聚簇索引，联合索引的选取，explain的了解，group by的优化，limit，子查询，联表查询等。
+> 2. 并不是一看名字叫 某某id 就把他定性为主键，一定要注意这一个坑，这道题里的坑就是user表的uid 和 thread 表的tid
+>
+> 若有更优sql解法，欢迎联系我~
+
+
+
+
+
+
+
+
+
+
 
 ---
 
